@@ -7,5 +7,5 @@ shoot you, but you can collect the bullets and fire them back to gain score.
 
 ## Build Instructions
 
-Run `./build.sh` to compile the program. Make sure that you have OpenGL 3.3
+Run `./build.sh` to compile the program. Make sure that you have OpenGL 4.1
 installed, along with GLFW.
