@@ -76,7 +76,8 @@ void unload_all_textures() {
 // Private -- render a texture atlas
 void render_texture(
     double x, double y, double width, double height,
-    RenderBasis xbasis, RenderBasis ybasis, gl::TextureAtlas * tex
+    RenderBasis xbasis, RenderBasis ybasis, gl::TextureAtlas * tex,
+    float x_start, float y_start, float w, float h
 ) {
     float x_off, y_off;
     switch (xbasis) {
@@ -114,10 +115,19 @@ void render_texture(
             xb + wb, yb
         },
         std::vector<int>{0, 1, 3, 3, 1, 2},
-        std::vector<float>{0.f, 0.f, 0.f, 1.f, 1.f, 1.f, 1.f, 0.f}
+        std::vector<float>{
+            x_start,     y_start    ,
+            x_start,     y_start + h,
+            x_start + w, y_start + h,
+            x_start + w, y_start
+        }
     };
     tex->bind();
     mesh.draw();
+}
+
+void Texture::render(double x, double y, double width, double height, RenderBasis xbasis, RenderBasis ybasis) {
+    render_texture(x, y, width, height, xbasis, ybasis, &atlas, start_x, start_y, w, h);
 }
 
 }

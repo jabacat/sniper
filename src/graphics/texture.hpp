@@ -36,6 +36,21 @@ public:
 
 namespace tex {
 
+class Texture {
+
+private:
+
+    // The texture atlas that this texture is part of.
+    gl::TextureAtlas& atlas;
+
+    double start_x, start_y, w, h;
+
+public:
+
+    void render(double x, double y, double width, double height, RenderBasis xbasis, RenderBasis ybasis);
+
+};
+
 // More textures here later?
 extern std::unique_ptr<gl::TextureAtlas>
     GAME_TEX;
