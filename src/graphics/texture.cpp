@@ -63,7 +63,7 @@ void TextureAtlas::unbind() {
 
 namespace tex {
 
-std::unique_ptr<gl::TextureAtlas> GAME_TEX;
+std::shared_ptr<gl::TextureAtlas> GAME_TEX;
 
 void load_all_textures() {
     GAME_TEX = std::make_unique<gl::TextureAtlas>("assets/texture-atlas.png");
@@ -76,7 +76,7 @@ void unload_all_textures() {
 // Private -- render a texture atlas
 void render_texture(
     double x, double y, double width, double height,
-    RenderBasis xbasis, RenderBasis ybasis, gl::TextureAtlas * tex,
+    RenderBasis xbasis, RenderBasis ybasis, std::shared_ptr<gl::TextureAtlas> tex,
     float x_start, float y_start, float w, float h
 ) {
     float x_off, y_off;
@@ -126,8 +126,16 @@ void render_texture(
     mesh.draw();
 }
 
+Texture::Texture(std::shared_ptr<gl::TextureAtlas> a, double sx, double sy, double w, double h) {
+    atlas = a;
+    start_x = sx;
+    start_y = sy;
+    this->w = w;
+    this->h = h;
+}
+
 void Texture::render(double x, double y, double width, double height, RenderBasis xbasis, RenderBasis ybasis) {
-    render_texture(x, y, width, height, xbasis, ybasis, &atlas, start_x, start_y, w, h);
+    render_texture(x, y, width, height, xbasis, ybasis, atlas, start_x, start_y, w, h);
 }
 
 }

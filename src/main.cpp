@@ -7,6 +7,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <graphics/shader.hpp>
+#include <graphics/texture.hpp>
+
 namespace sniper {
 
 GLFWwindow * wn;
@@ -25,9 +28,16 @@ void init() {
 	gladLoadGL();
 	glfwShowWindow(wn);
 
+    gl::load_all_shaders();
+    tex::load_all_textures();
+
 }
 
 void mainloop() {
+
+    tex::Texture player_tex{tex::GAME_TEX, 0.0, 0.75, 0.25, 0.25};
+    
+    gl::GAME_SHADER->bind();
 
     while (!glfwWindowShouldClose(wn)) {
 
@@ -37,8 +47,8 @@ void mainloop() {
 		auto start_of_frame = std::chrono::steady_clock::now();
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-        // TODO rendering
+
+        player_tex.render(0, 0, 0.2, 0.2, tex::RenderBasis::MID, tex::RenderBasis::MID);
 
 		glfwSwapBuffers(wn);
 		glfwPollEvents();
@@ -47,9 +57,14 @@ void mainloop() {
 
 	}
 
+    gl::GAME_SHADER->unbind();
+
 }
 
 void cleanup() {
+
+    tex::unload_all_textures();
+    gl::unload_all_shaders();
 
     glfwDestroyWindow(wn);
 	glfwTerminate();

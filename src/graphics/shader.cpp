@@ -115,7 +115,7 @@ void Shader::set_uniform_value(std::string name, float value) {
 
 void load_all_shaders() {
     GAME_SHADER = std::make_unique<Shader>(
-        "src/gl/shad/basic_vert.glsl", "src/gl/shad/basic_frag.glsl"
+        "src/shader/basic_vert.glsl", "src/shader/basic_frag.glsl"
     );
 }
 

@@ -36,28 +36,6 @@ public:
 
 namespace tex {
 
-class Texture {
-
-private:
-
-    // The texture atlas that this texture is part of.
-    gl::TextureAtlas& atlas;
-
-    double start_x, start_y, w, h;
-
-public:
-
-    void render(double x, double y, double width, double height, RenderBasis xbasis, RenderBasis ybasis);
-
-};
-
-// More textures here later?
-extern std::unique_ptr<gl::TextureAtlas>
-    GAME_TEX;
-
-void load_all_textures();
-void unload_all_textures();
-
 /**
  * What part of the texture the coordinates reference. e.g.: LOW, CENTER means
  * the x coordinate is the left of the figure and the y coordinate is the middle
@@ -68,5 +46,29 @@ enum RenderBasis {
     MID,
     HI
 };
+
+class Texture {
+
+private:
+
+    // The texture atlas that this texture is part of.
+    std::shared_ptr<gl::TextureAtlas> atlas;
+
+    double start_x, start_y, w, h;
+
+public:
+
+    Texture(std::shared_ptr<gl::TextureAtlas> a, double sx, double sy, double w, double h);
+
+    void render(double x, double y, double width, double height, RenderBasis xbasis, RenderBasis ybasis);
+
+};
+
+// More textures here later?
+extern std::shared_ptr<gl::TextureAtlas>
+    GAME_TEX;
+
+void load_all_textures();
+void unload_all_textures();
 
 }
