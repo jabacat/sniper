@@ -1,5 +1,3 @@
-// clang-format off
-
 /**
  * Implementation of stb_image.
  */
