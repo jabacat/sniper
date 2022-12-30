@@ -1,6 +1,6 @@
 namespace game {
 
-class GameObjext {
+class GameObject {
   public:
     void set_pos(int x_pos, int y_pos);
 
