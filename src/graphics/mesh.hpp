@@ -8,12 +8,11 @@
 
 class Mesh {
 
-private:
+  private:
     unsigned vao, vertices_id, index_id, texcoords_id, indices_ct;
 
-public:
+  public:
     Mesh(std::vector<float> vertices, std::vector<int> indices, std::vector<float> texcoords);
     void draw();
     ~Mesh();
-
 };

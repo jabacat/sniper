@@ -9,13 +9,15 @@
 namespace {
 
 // Load a whole file as a string.
-const GLchar* load_file_as_string(const char* path) {
+const GLchar *load_file_as_string(const char *path) {
     // TODO - do this with C++ classes.
-    FILE* fp = fopen(path, "r");
-    if (!fp) return nullptr;
+    FILE *fp = fopen(path, "r");
+    if (!fp)
+        return nullptr;
+
     fseek(fp, 0, SEEK_END);
     int len = ftell(fp);
-    char* code = (char*) malloc(len + 1);
+    char *code = (char *)malloc(len + 1);
     rewind(fp);
     for (int pos = 0; pos < len; ++pos) {
         code[pos] = getc(fp);
@@ -25,11 +27,11 @@ const GLchar* load_file_as_string(const char* path) {
     return code;
 }
 
-}
+} // namespace
 
 namespace gl {
 
-Shader::Shader(const char* vertex_path, const char* fragment_path) {
+Shader::Shader(const char *vertex_path, const char *fragment_path) {
 
     this->program_id = glCreateProgram();
     // TODO - check for error
@@ -40,12 +42,11 @@ Shader::Shader(const char* vertex_path, const char* fragment_path) {
 
     this->link(vert, frag);
 
-    free((void*) vertcode);
-    free((void*) fragcode);
-    
+    free((void *)vertcode);
+    free((void *)fragcode);
 }
 
-int Shader::create_subshader(const GLchar* code, int type) {
+int Shader::create_subshader(const GLchar *code, int type) {
 
     int id = glCreateShader(type);
     if (!id) {
@@ -65,13 +66,12 @@ int Shader::create_subshader(const GLchar* code, int type) {
     }
 
     return id;
-
 }
 
 void Shader::link(int vert, int frag) {
     glAttachShader(this->program_id, vert);
     glAttachShader(this->program_id, frag);
-    glLinkProgram (this->program_id);
+    glLinkProgram(this->program_id);
     // We no longer need these sub-shaders.
     glDetachShader(this->program_id, vert);
     glDetachShader(this->program_id, frag);
@@ -114,13 +114,11 @@ void Shader::set_uniform_value(std::string name, float value) {
 }
 
 void load_all_shaders() {
-    GAME_SHADER = std::make_unique<Shader>(
-        "src/shader/basic_vert.glsl", "src/shader/basic_frag.glsl"
-    );
+    GAME_SHADER = std::make_unique<Shader>("src/shader/basic_vert.glsl", "src/shader/basic_frag.glsl");
 }
 
 void unload_all_shaders() {
     GAME_SHADER->destroy();
 }
 
-}
+} // namespace gl
