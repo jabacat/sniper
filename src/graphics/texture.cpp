@@ -20,7 +20,7 @@ TextureAtlas::TextureAtlas(std::string name) {
     stbi_image_free(data);
 }
 
-unsigned TextureAtlas::load(const unsigned char *buffer, int w, int h, int f) {
+unsigned TextureAtlas::load(const unsigned char * buffer, int w, int h, int f) {
 
     unsigned ret;
 

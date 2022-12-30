@@ -12,7 +12,7 @@
 
 namespace sniper {
 
-GLFWwindow *wn;
+GLFWwindow * wn;
 
 void init() {
 

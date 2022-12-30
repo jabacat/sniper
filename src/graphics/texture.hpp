@@ -20,7 +20,7 @@ class TextureAtlas {
   protected:
     // Load a buffer of width w and height h, of format f, into a GL texture and
     // return the ID.
-    static unsigned load(const unsigned char *buffer, int w, int h, int f);
+    static unsigned load(const unsigned char * buffer, int w, int h, int f);
 
   public:
     TextureAtlas(std::string filename);
