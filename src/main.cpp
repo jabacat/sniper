@@ -4,8 +4,10 @@
 #include <iostream>
 #include <thread>
 
-#include <GLFW/glfw3.h>
+// clang-format off
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
+// clang-format on
 
 #include <graphics/shader.hpp>
 #include <graphics/texture.hpp>
