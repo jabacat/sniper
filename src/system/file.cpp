@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cerrno>
+#include <cstring>
 
 #if defined(__unix__)
 #include <sys/mman.h>
@@ -108,6 +109,8 @@ LoadResult<std::string> load_file_as_string(ZStringView filename) {
 }
 
 [[noreturn]] void load_failed(int status) {
-    std::fputs("FATAL: Failed to load file. Aborting.\n", stderr);
+    std::fputs("FATAL: Failed to load file: ", stderr);
+    std::fputs(strerror(status), stderr);
+    std::fputs("\nAborting.\n", stderr);
     std::abort();
 }
