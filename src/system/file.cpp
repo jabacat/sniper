@@ -88,9 +88,10 @@ static LoadResult<T> load_file(ZStringView filename) {
             size_t cap = buf.capacity() - cur;
             size_t read = std::fread(buf.data() + cur, 1, cap, fp);
             if (read == 0) {
-                if (std::feof(fp))
+                if (std::feof(fp)) {
+                    buf.resize(cur);
                     break;
-                else
+                } else
                     return LoadResult<T>::last_errno();
             }
             buf.resize(cur + read);
