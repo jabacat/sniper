@@ -2,7 +2,7 @@ namespace game {
 
 class Renderable {
   public:
-    void render();
+    virtual void render();
 };
 
 } // namespace game
