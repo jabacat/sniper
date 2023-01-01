@@ -7,6 +7,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <game/player.hpp>
 #include <graphics/shader.hpp>
 #include <graphics/texture.hpp>
 
@@ -35,7 +36,7 @@ void init() {
 
 void mainloop() {
 
-    tex::Texture player_tex{tex::GAME_TEX, 0.0, 0.75, 0.25, 0.25};
+    game::Player player(0, 0);
     
     gl::GAME_SHADER->bind();
 
@@ -48,7 +49,7 @@ void mainloop() {
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        player_tex.render(0, 0, 0.2, 0.2, tex::RenderBasis::MID, tex::RenderBasis::MID);
+        player.render();
 
 		glfwSwapBuffers(wn);
 		glfwPollEvents();
