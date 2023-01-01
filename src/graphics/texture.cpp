@@ -67,8 +67,8 @@ std::shared_ptr<gl::TextureAtlas> GAME_TEX;
 std::shared_ptr<tex::Texture> PLAYER_TEX;
 
 void load_all_textures() {
-    GAME_TEX = std::make_unique<gl::TextureAtlas>("assets/texture-atlas.png");
-    PLAYER_TEX = std::make_unique<tex::Texture>(tex::GAME_TEX, 0.0, 0.75, 0.25, 0.25);
+    GAME_TEX = std::make_shared<gl::TextureAtlas>("assets/texture-atlas.png");
+    PLAYER_TEX = std::make_shared<tex::Texture>(tex::GAME_TEX, 0.0, 0.75, 0.25, 0.25);
 }
 
 void unload_all_textures() {
