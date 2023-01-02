@@ -2,8 +2,6 @@
 
 namespace game {
 
-void Renderable::render() {
-    // TODO render
-}
+// Anything needed here?
 
 } // namespace game

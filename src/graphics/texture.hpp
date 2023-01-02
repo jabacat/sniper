@@ -68,6 +68,8 @@ public:
 extern std::shared_ptr<gl::TextureAtlas>
     GAME_TEX;
 
+extern std::shared_ptr<tex::Texture> PLAYER_TEX;
+
 void load_all_textures();
 void unload_all_textures();
 

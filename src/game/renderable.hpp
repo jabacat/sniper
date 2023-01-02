@@ -1,8 +1,10 @@
+#pragma once
+
 namespace game {
 
 class Renderable {
   public:
-    void render();
+    virtual void render() = 0;
 };
 
 } // namespace game
