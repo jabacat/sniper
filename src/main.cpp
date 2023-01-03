@@ -118,7 +118,7 @@ void mainloop() {
 		glfwSwapBuffers(wn);
 		glfwPollEvents();
 
-		std::this_thread::sleep_until(start_of_frame + std::chrono::milliseconds(20));
+		std::this_thread::sleep_until(start_of_frame + std::chrono::milliseconds(1000 / FPS));
 
 	}
 
