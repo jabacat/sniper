@@ -10,7 +10,6 @@ class Player : GameObject, Renderable {
   public:
     void render() override;
     Player(int xloc, int yloc);
-
 };
 
-} // namespace
+} // namespace game

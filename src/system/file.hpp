@@ -1,12 +1,12 @@
 #pragma once
 
-#include <vector>
-#include <string>
 #include "string.hpp"
+#include <string>
+#include <vector>
 
 [[noreturn]] void load_failed(int status);
 
-template<typename T>
+template <typename T>
 struct LoadResult {
     int status;
     T result;
@@ -22,11 +22,9 @@ struct LoadResult {
         return std::move(result);
     }
 
-    bool is_ok() const {
-        return status == 0;
-    }
+    bool is_ok() const { return status == 0; }
 
-    private:
+  private:
     LoadResult(std::nullptr_t, int status) : status(status) {}
 };
 

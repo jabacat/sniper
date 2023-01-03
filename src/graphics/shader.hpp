@@ -15,7 +15,7 @@ namespace gl {
 
 class Shader {
 
-private:
+  private:
     // The OpenGL ID of this shader.
     unsigned program_id;
     // Create a single vertex or fragment shader.
@@ -26,23 +26,21 @@ private:
     // All uniforms.
     std::map<std::string, int> uniforms;
 
-public:
+  public:
     // Take in the file paths.
-  Shader(std::string_view vertex_source, std::string_view fragment_source);
-  ~Shader();
+    Shader(std::string_view vertex_source, std::string_view fragment_source);
+    ~Shader();
 
-  static Shader load_from_file(ZStringView vertex_fname,
-                               ZStringView fragment_fname);
+    static Shader load_from_file(ZStringView vertex_fname, ZStringView fragment_fname);
 
-  void bind(); // set as active shader
-  void unbind();
-  void destroy();
+    void bind(); // set as active shader
+    void unbind();
+    void destroy();
 
-  void register_uniform(std::string name);
-  void set_uniform_value(std::string name, float value);
+    void register_uniform(std::string name);
+    void set_uniform_value(std::string name, float value);
 
-  friend void unload_all_shaders();
-
+    friend void unload_all_shaders();
 };
 
 extern std::unique_ptr<Shader> GAME_SHADER; // the basic shader
@@ -53,4 +51,4 @@ extern std::unique_ptr<Shader> GAME_SHADER; // the basic shader
 void load_all_shaders();
 void unload_all_shaders();
 
-}
+} // namespace gl

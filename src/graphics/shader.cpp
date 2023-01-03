@@ -10,7 +10,7 @@
 namespace gl {
 
 static std::string_view bytes_as_string_view(const std::vector<unsigned char>& vec) {
-    return std::string_view(reinterpret_cast<const char*>(vec.data()), vec.size());
+    return std::string_view(reinterpret_cast<const char *>(vec.data()), vec.size());
 }
 
 Shader::Shader(std::string_view vertex_source, std::string_view fragment_source) {
@@ -37,7 +37,7 @@ int Shader::create_subshader(std::string_view source, GLenum type) {
         // TODO -- log some error
     }
 
-    const char* src = source.data();
+    const char * src = source.data();
     int len = source.size();
     glShaderSource(id, 1, &src, &len);
     glCompileShader(id);
@@ -52,13 +52,12 @@ int Shader::create_subshader(std::string_view source, GLenum type) {
     }
 
     return id;
-
 }
 
 void Shader::link(int vert, int frag) {
     glAttachShader(this->program_id, vert);
     glAttachShader(this->program_id, frag);
-    glLinkProgram (this->program_id);
+    glLinkProgram(this->program_id);
     // We no longer need these sub-shaders.
     glDetachShader(this->program_id, vert);
     glDetachShader(this->program_id, frag);
@@ -101,13 +100,14 @@ void Shader::set_uniform_value(std::string name, float value) {
 }
 
 void load_all_shaders() {
+    // clang-format off
     GAME_SHADER = std::make_unique<Shader>(Shader::load_from_file(
-        "src/shader/basic_vert.glsl", "src/shader/basic_frag.glsl"
-    ));
+        "src/shader/basic_vert.glsl", "src/shader/basic_frag.glsl"));
+    // clang-format on
 }
 
 void unload_all_shaders() {
     GAME_SHADER->destroy();
 }
 
-}
+} // namespace gl

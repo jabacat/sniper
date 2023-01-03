@@ -1,7 +1,7 @@
 #include "texture.hpp"
 
-#include <graphics/stb_image.h>
 #include <graphics/mesh.hpp>
+#include <graphics/stb_image.h>
 
 #include <cstdio>
 #include <cstdlib>
@@ -25,10 +25,9 @@ TextureAtlas::TextureAtlas(ZStringView fname) {
     this->id = load(data, w, h, GL_RGBA);
 
     stbi_image_free(data);
-
 }
 
-unsigned TextureAtlas::load(const unsigned char* buffer, int w, int h, int f) {
+unsigned TextureAtlas::load(const unsigned char * buffer, int w, int h, int f) {
 
     unsigned ret;
 
@@ -44,7 +43,6 @@ unsigned TextureAtlas::load(const unsigned char* buffer, int w, int h, int f) {
     glGenerateMipmap(GL_TEXTURE_2D);
 
     return ret;
-
 }
 
 void TextureAtlas::destroy() {
@@ -66,7 +64,7 @@ void TextureAtlas::unbind() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-}
+} // namespace gl
 
 namespace tex {
 
@@ -84,38 +82,38 @@ void unload_all_textures() {
 
 // Private -- render a texture atlas
 void render_texture(
-    double x, double y, double width, double height,
-    RenderBasis xbasis, RenderBasis ybasis, std::shared_ptr<gl::TextureAtlas> tex,
-    float x_start, float y_start, float w, float h
+    double x, double y, double width, double height, RenderBasis xbasis, RenderBasis ybasis,
+    std::shared_ptr<gl::TextureAtlas> tex, float x_start, float y_start, float w, float h
 ) {
     float x_off, y_off;
     switch (xbasis) {
-        case LOW:
-            x_off = 0;
-            break;
-        case MID:
-            x_off = - width / 2;
-            break;
-        case HI:
-            x_off = - width;
-            break;
+    case LOW:
+        x_off = 0;
+        break;
+    case MID:
+        x_off = -width / 2;
+        break;
+    case HI:
+        x_off = -width;
+        break;
     }
     switch (ybasis) {
-        case LOW:
-            y_off = 0;
-            break;
-        case MID:
-            y_off = - height / 2;
-            break;
-        case HI:
-            y_off = - height;
-            break;
+    case LOW:
+        y_off = 0;
+        break;
+    case MID:
+        y_off = -height / 2;
+        break;
+    case HI:
+        y_off = -height;
+        break;
     }
-    float
-        xb = (float) x + x_off,
-        yb = (float) y + y_off,
-        wb = (float) width,
-        hb = (float) height;
+    // Maybe we can handle it better in clang-format
+    float xb = (float)x + x_off;
+    float yb = (float)y + y_off;
+    float wb = (float)width;
+    float hb = (float)height;
+    // clang-format off
     Mesh mesh {
         std::vector<float>{
             xb,      yb,
@@ -131,20 +129,16 @@ void render_texture(
             x_start + w, y_start
         }
     };
+    // clang-format on
     tex->bind();
     mesh.draw();
 }
 
 Texture::Texture(std::shared_ptr<gl::TextureAtlas> a, double sx, double sy, double w, double h)
-    : atlas(std::move(a))
-    , start_x(sx)
-    , start_y(sy)
-    , w(w)
-    , h(h)
-{}
+    : atlas(std::move(a)), start_x(sx), start_y(sy), w(w), h(h) {}
 
 void Texture::render(double x, double y, double width, double height, RenderBasis xbasis, RenderBasis ybasis) {
     render_texture(x, y, width, height, xbasis, ybasis, atlas, start_x, start_y, w, h);
 }
 
-}
+} // namespace tex

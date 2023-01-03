@@ -1,14 +1,14 @@
 #include "file.hpp"
 #include "string.hpp"
 
+#include <cerrno>
 #include <cstdio>
 #include <cstdlib>
-#include <cerrno>
 #include <cstring>
 
 #if defined(__unix__)
-#include <sys/mman.h>
-#include <sys/stat.h>
+    #include <sys/mman.h>
+    #include <sys/stat.h>
 #endif
 
 template <typename T>
@@ -25,9 +25,7 @@ struct FileHandle {
             std::fclose(fp);
     }
 
-    operator FILE * () const {
-        return fp;
-    }
+    operator FILE *() const { return fp; }
 
     void close() {
         if (fp) {
@@ -36,12 +34,15 @@ struct FileHandle {
         }
     }
 
-    #if defined(__unix__)
+#if defined(__unix__)
     int fd() const {
         return fileno(fp);
     }
-    #endif
+#endif
 };
+
+// It doesn't quite like my indentation with the preprocessor & labels
+// clang-format off
 
 template <typename T>
 static LoadResult<T> load_file(ZStringView filename) {
@@ -50,7 +51,7 @@ static LoadResult<T> load_file(ZStringView filename) {
         return LoadResult<T>::last_errno();
 
     // Strategy 1. Try mmap
-    #if defined (__unix__)
+    #if defined(__unix__)
     do {
         struct stat stat;
         int fd = fp.fd();
@@ -63,12 +64,12 @@ static LoadResult<T> load_file(ZStringView filename) {
             goto _S_read_in_loop;
         }
         size_t size = stat.st_size;
-        void* mem = mmap(nullptr, size, PROT_READ, MAP_PRIVATE, fd, 0);
+        void * mem = mmap(nullptr, size, PROT_READ, MAP_PRIVATE, fd, 0);
         if (mem == MAP_FAILED) {
             break;
         }
         fp.close();
-        const unsigned char* bytes = reinterpret_cast<const unsigned char *>(mem);
+        const unsigned char * bytes = reinterpret_cast<const unsigned char *>(mem);
         T buf(bytes, bytes + size);
         munmap(mem, size);
         return std::move(buf);
@@ -93,7 +94,7 @@ static LoadResult<T> load_file(ZStringView filename) {
             // Something went very wrong!
             return LoadResult<T>::last_errno();
         }
-        for (size_t left = len; left; ) {
+        for (size_t left = len; left;) {
             size_t read = std::fread(buf.data() + (len - left), 1, left, fp);
             if (read == 0) {
                 // We handled left == 0 already
@@ -104,8 +105,7 @@ static LoadResult<T> load_file(ZStringView filename) {
         return std::move(buf);
     } while (false);
     // Strategy 3. Just read it in a loop
-    _S_read_in_loop:
-    {
+    _S_read_in_loop: {
         T buf;
         while (true) {
             buf.reserve(buf.capacity() + 0x100);
@@ -125,6 +125,8 @@ static LoadResult<T> load_file(ZStringView filename) {
         return std::move(buf);
     }
 }
+
+// clang-format on
 
 LoadResult<std::vector<unsigned char>> load_file_as_bytes(ZStringView filename) {
     return load_file<std::vector<unsigned char>>(filename);

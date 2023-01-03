@@ -17,4 +17,4 @@ void Player::render() {
     tex::PLAYER_TEX->render(this->x, this->y, PLAYER_SIZE, PLAYER_SIZE, tex::RenderBasis::MID, tex::RenderBasis::MID);
 }
 
-}
+} // namespace game
