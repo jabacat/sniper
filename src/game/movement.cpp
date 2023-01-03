@@ -67,11 +67,21 @@ namespace game {
 
 void Player::do_bounce(float screen_edge) {
 
-    if (x > screen_edge || x < -screen_edge) {
+    if (x > screen_edge) {
         vx *= -1;
+        x = screen_edge;
     }
-    if (y > screen_edge || y < -screen_edge) {
+    if (x < -screen_edge) {
+        vx *= -1;
+        x = -screen_edge;
+    }
+    if (y > screen_edge) {
         vy *= -1;
+        y = screen_edge;
+    }
+    if (y < -screen_edge) {
+        vy *= -1;
+        y = -screen_edge;
     }
 
 }
