@@ -26,15 +26,4 @@ void Player::setvel(std::pair<float, float> newvel) {
     this->vy = newvel.second;
 }
 
-void Player::do_bounce(float screen_edge) {
-
-    if (x > screen_edge || x < -screen_edge) {
-        vx *= -1;
-    }
-    if (y > screen_edge || y < -screen_edge) {
-        vy *= -1;
-    }
-
-}
-
 }
