@@ -7,6 +7,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <system/string.hpp>
 
 #include <glad/glad.h>
 
@@ -18,7 +19,7 @@ class Shader {
     // The OpenGL ID of this shader.
     unsigned program_id;
     // Create a single vertex or fragment shader.
-    int create_subshader(const char * code, int type);
+    int create_subshader(std::string_view source, GLenum type);
     // Finalize the shader.
     void link(int vert, int frag);
 
@@ -27,8 +28,10 @@ class Shader {
 
   public:
     // Take in the file paths.
-    Shader(const char * vertex_path, const char * fragment_path);
+    Shader(std::string_view vertex_source, std::string_view fragment_source);
     ~Shader();
+
+    static Shader load_from_file(ZStringView vertex_fname, ZStringView fragment_fname);
 
     void bind(); // set as active shader
     void unbind();

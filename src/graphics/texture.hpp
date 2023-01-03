@@ -6,7 +6,7 @@
 #pragma once
 
 #include <memory>
-#include <string>
+#include <system/string.hpp>
 
 #include <glad/glad.h>
 
@@ -15,7 +15,7 @@ namespace gl {
 class TextureAtlas {
 
     // The OpenGL ID assigned to this texture.
-    unsigned id;
+    unsigned id = 0;
 
   protected:
     // Load a buffer of width w and height h, of format f, into a GL texture and
@@ -23,7 +23,7 @@ class TextureAtlas {
     static unsigned load(const unsigned char * buffer, int w, int h, int f);
 
   public:
-    TextureAtlas(std::string filename);
+    TextureAtlas(ZStringView filename);
     TextureAtlas() = default;
     ~TextureAtlas();
     void bind();   // Make this the currently drawn texture
@@ -58,6 +58,8 @@ class Texture {
 
 // More textures here later?
 extern std::shared_ptr<gl::TextureAtlas> GAME_TEX;
+
+extern std::shared_ptr<tex::Texture> PLAYER_TEX;
 
 void load_all_textures();
 void unload_all_textures();
