@@ -113,6 +113,8 @@ void mainloop() {
         player.setvel(new_speed(player.getvel()));
         player.do_pos_updates();
 
+        player.do_bounce(0.9f);
+
         player.render();
 
 		glfwSwapBuffers(wn);

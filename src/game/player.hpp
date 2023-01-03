@@ -13,6 +13,9 @@ class Player : public GameObject, Renderable {
     void render() override;
     Player(int xloc, int yloc);
 
+    /* Bounce off the edges of the screen. */
+    void do_bounce(float screen_edge);
+
     // Read and update velocities.
     std::pair<float, float> getvel();
     void setvel(std::pair<float, float> newvel);
