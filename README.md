@@ -7,6 +7,9 @@
 Sniper is a very simple game where you run from an adversary which tries to
 shoot you, but you can collect the bullets and fire them back to gain score.
 
+## Requirements
+For Arch Linux and similar, install `glfw-x11`
+
 ## Build Instructions
 
 Run `./scripts/build.sh` to compile the program. Make sure that you have OpenGL 4.1
