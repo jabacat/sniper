@@ -11,6 +11,12 @@
 
 #include <glad/glad.h>
 
+#ifdef __APPLE__
+typedef const GLchar * FileContents;
+#else
+typedef std::string_view FileContents;
+#endif // __APPLE__
+
 namespace gl {
 
 class Shader {
@@ -19,7 +25,7 @@ private:
     // The OpenGL ID of this shader.
     unsigned program_id;
     // Create a single vertex or fragment shader.
-    int create_subshader(std::string_view source, GLenum type);
+    int create_subshader(FileContents source, GLenum type);
     // Finalize the shader.
     void link(int vert, int frag);
 
@@ -28,11 +34,8 @@ private:
 
 public:
     // Take in the file paths.
-  Shader(std::string_view vertex_source, std::string_view fragment_source);
+  Shader(FileContents vertex_source, FileContents fragment_source);
   ~Shader();
-
-  static Shader load_from_file(ZStringView vertex_fname,
-                               ZStringView fragment_fname);
 
   void bind(); // set as active shader
   void unbind();

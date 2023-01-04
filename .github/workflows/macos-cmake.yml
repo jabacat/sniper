@@ -1,0 +1,12 @@
+name: macOS-CMake
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: macos-latest
+    name: macOS compilation
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: build
+        run: ./scripts/build.sh
