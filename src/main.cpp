@@ -3,10 +3,12 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include <vector>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <game/movement.hpp>
 #include <game/player.hpp>
 #include <graphics/shader.hpp>
 #include <graphics/texture.hpp>
@@ -49,12 +51,18 @@ void mainloop() {
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Update the player speed and position.
+        player.setvel(mvmt::new_speed(wn, player.getvel()));
+        player.do_pos_updates();
+
+        player.do_bounce(0.9f);
+
         player.render();
 
 		glfwSwapBuffers(wn);
 		glfwPollEvents();
 
-		std::this_thread::sleep_until(start_of_frame + std::chrono::milliseconds(20));
+		std::this_thread::sleep_until(start_of_frame + std::chrono::milliseconds(1000 / mvmt::FPS));
 
 	}
 
