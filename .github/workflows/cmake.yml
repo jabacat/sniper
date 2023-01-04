@@ -23,7 +23,7 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: |
-        apt update
-        apt install libglfw3-dev libglfw3
+        sudo apt update
+        sudo apt install libglfw3-dev libglfw3
         sh ./scripts/build.sh
 
