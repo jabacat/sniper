@@ -17,4 +17,13 @@ void Player::render() {
     tex::PLAYER_TEX->render(this->x, this->y, PLAYER_SIZE, PLAYER_SIZE, tex::RenderBasis::MID, tex::RenderBasis::MID);
 }
 
+std::pair<float, float> Player::getvel() {
+    return std::pair(this->vx, this->vy);
+}
+
+void Player::setvel(std::pair<float, float> newvel) {
+    this->vx = newvel.first;
+    this->vy = newvel.second;
+}
+
 }
