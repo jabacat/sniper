@@ -5,54 +5,41 @@
 #include <string>
 
 #include <glad/glad.h>
-
-namespace {
-
-// Load a whole file as a string.
-const GLchar* load_file_as_string(const char* path) {
-    // TODO - do this with C++ classes.
-    FILE* fp = fopen(path, "r");
-    if (!fp) return nullptr;
-    fseek(fp, 0, SEEK_END);
-    int len = ftell(fp);
-    char* code = (char*) malloc(len + 1);
-    rewind(fp);
-    for (int pos = 0; pos < len; ++pos) {
-        code[pos] = getc(fp);
-    }
-    fclose(fp);
-    code[len] = 0;
-    return code;
-}
-
-}
+#include <system/file.hpp>
 
 namespace gl {
 
-Shader::Shader(const char* vertex_path, const char* fragment_path) {
+static std::string_view bytes_as_string_view(const std::vector<unsigned char>& vec) {
+    return std::string_view(reinterpret_cast<const char*>(vec.data()), vec.size());
+}
+
+Shader::Shader(std::string_view vertex_source, std::string_view fragment_source) {
 
     this->program_id = glCreateProgram();
     // TODO - check for error
 
-    auto vertcode = load_file_as_string(vertex_path), fragcode = load_file_as_string(fragment_path);
-    int vert = create_subshader(vertcode, GL_VERTEX_SHADER);
-    int frag = create_subshader(fragcode, GL_FRAGMENT_SHADER);
+    int vert = create_subshader(vertex_source, GL_VERTEX_SHADER);
+    int frag = create_subshader(fragment_source, GL_FRAGMENT_SHADER);
 
     this->link(vert, frag);
-
-    free((void*) vertcode);
-    free((void*) fragcode);
-    
 }
 
-int Shader::create_subshader(const GLchar* code, int type) {
+Shader Shader::load_from_file(ZStringView vertex_fname, ZStringView fragment_fname) {
+    std::vector<unsigned char> vertcode = load_file_as_bytes(vertex_fname);
+    std::vector<unsigned char> fragcode = load_file_as_bytes(fragment_fname);
+    return Shader(bytes_as_string_view(vertcode), bytes_as_string_view(fragcode));
+}
+
+int Shader::create_subshader(std::string_view source, GLenum type) {
 
     int id = glCreateShader(type);
     if (!id) {
         // TODO -- log some error
     }
 
-    glShaderSource(id, 1, &code, nullptr);
+    const char* src = source.data();
+    int len = source.size();
+    glShaderSource(id, 1, &src, &len);
     glCompileShader(id);
 
     GLint compile_status;
@@ -114,9 +101,9 @@ void Shader::set_uniform_value(std::string name, float value) {
 }
 
 void load_all_shaders() {
-    GAME_SHADER = std::make_unique<Shader>(
+    GAME_SHADER = std::make_unique<Shader>(Shader::load_from_file(
         "src/shader/basic_vert.glsl", "src/shader/basic_frag.glsl"
-    );
+    ));
 }
 
 void unload_all_shaders() {

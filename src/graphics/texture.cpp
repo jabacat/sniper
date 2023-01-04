@@ -3,17 +3,24 @@
 #include <graphics/stb_image.h>
 #include <graphics/mesh.hpp>
 
+#include <cstdio>
+#include <cstdlib>
+
 namespace gl {
 
-TextureAtlas::TextureAtlas(std::string name) {
+TextureAtlas::TextureAtlas(ZStringView fname) {
 
     stbi_set_flip_vertically_on_load(true);
 
     // STB stuffs these with data
     int w, h, channels;
-    auto data = stbi_load(name.c_str(), &w, &h, &channels, 0);
-    if (!data)
-        ; // TODO - error out
+    auto data = stbi_load(fname, &w, &h, &channels, 0);
+    if (!data) {
+        std::fputs("FATAL: Failed to load texture atlas from file: ", stderr);
+        std::fputs(fname, stderr);
+        std::fputs("\nAborting.\n", stderr);
+        std::abort();
+    }
 
     this->id = load(data, w, h, GL_RGBA);
 
@@ -72,7 +79,7 @@ void load_all_textures() {
 }
 
 void unload_all_textures() {
-    GAME_TEX->destroy();
+    GAME_TEX.reset();
 }
 
 // Private -- render a texture atlas
@@ -128,13 +135,13 @@ void render_texture(
     mesh.draw();
 }
 
-Texture::Texture(std::shared_ptr<gl::TextureAtlas> a, double sx, double sy, double w, double h) {
-    atlas = a;
-    start_x = sx;
-    start_y = sy;
-    this->w = w;
-    this->h = h;
-}
+Texture::Texture(std::shared_ptr<gl::TextureAtlas> a, double sx, double sy, double w, double h)
+    : atlas(std::move(a))
+    , start_x(sx)
+    , start_y(sy)
+    , w(w)
+    , h(h)
+{}
 
 void Texture::render(double x, double y, double width, double height, RenderBasis xbasis, RenderBasis ybasis) {
     render_texture(x, y, width, height, xbasis, ybasis, atlas, start_x, start_y, w, h);
