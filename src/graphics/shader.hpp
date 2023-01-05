@@ -34,7 +34,7 @@ private:
 
 public:
     // Take in the file paths.
-  Shader(FileContents vertex_source, FileContents fragment_source);
+  Shader(ZStringView vertex_source, ZStringView fragment_source);
   ~Shader();
 
   void bind(); // set as active shader
