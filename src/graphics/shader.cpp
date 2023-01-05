@@ -33,7 +33,7 @@ const GLchar* load_file_as_string(const char* path) {
 }
 #endif // __APPLE__
 
-Shader::Shader(FileContents vertex_fname, FileContents fragment_fname) {
+Shader::Shader(ZStringView vertex_fname, ZStringView fragment_fname) {
 
 #ifndef __APPLE__
     std::vector<unsigned char> vertex_source = load_file_as_bytes(vertex_fname);
