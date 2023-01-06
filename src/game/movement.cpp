@@ -85,6 +85,7 @@ void Player::do_bounce(float screen_edge) {
     }
 }
 
+// TODO: abstract this out - issue #44
 void Bullet::do_bounce(float screen_edge) {
 
     if (x > screen_edge) {
