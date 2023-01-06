@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 
 #include <game/player.hpp>
+#include <game/bullet.hpp>
 
 namespace mvmt {
 
