@@ -6,8 +6,8 @@
 #include <vector>
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
+#include <game/bullet.hpp>
 #include <game/movement.hpp>
 #include <game/player.hpp>
 #include <graphics/shader.hpp>
@@ -15,7 +15,7 @@
 
 namespace sniper {
 
-GLFWwindow * wn;
+GLFWwindow *wn;
 
 void init() {
 
@@ -27,47 +27,50 @@ void init() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     wn = glfwCreateWindow(500, 500, "Sniper", nullptr, nullptr);
-	glfwMakeContextCurrent(wn);
-	gladLoadGL();
-	glfwShowWindow(wn);
+    glfwMakeContextCurrent(wn);
+    gladLoadGL();
+    glfwShowWindow(wn);
 
     gl::load_all_shaders();
     tex::load_all_textures();
-
 }
 
 void mainloop() {
 
+    static float GAME_EDGE = 0.9f;
+
     game::Player player(0, 0);
-    
+    game::Bullet bullet(0.2, 0.2, 1);
+
     gl::GAME_SHADER->bind();
 
     while (!glfwWindowShouldClose(wn)) {
 
-		// We want each frame to last for exactly 1/50th second,
-		// so capture the starting time so we can sleep for the
-		// needed amount of time at the end of the frame.
-		auto start_of_frame = std::chrono::steady_clock::now();
+        // We want each frame to last for exactly 1/50th second,
+        // so capture the starting time so we can sleep for the
+        // needed amount of time at the end of the frame.
+        auto start_of_frame = std::chrono::steady_clock::now();
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Update the player speed and position.
         player.setvel(mvmt::new_speed(wn, player.getvel()));
         player.do_pos_updates();
 
-        player.do_bounce(0.9f);
+        player.do_bounce(GAME_EDGE);
+        bullet.do_bounce(GAME_EDGE);
 
         player.render();
+        bullet.render();
 
-		glfwSwapBuffers(wn);
-		glfwPollEvents();
+        glfwSwapBuffers(wn);
+        glfwPollEvents();
 
-		std::this_thread::sleep_until(start_of_frame + std::chrono::milliseconds(1000 / mvmt::FPS));
-
-	}
+        std::this_thread::sleep_until(
+            start_of_frame + std::chrono::milliseconds(1000 / mvmt::FPS));
+    }
 
     gl::GAME_SHADER->unbind();
-
 }
 
 void cleanup() {
@@ -76,18 +79,16 @@ void cleanup() {
     gl::unload_all_shaders();
 
     glfwDestroyWindow(wn);
-	glfwTerminate();
-
+    glfwTerminate();
 }
 
-}
+} // namespace sniper
 
 int main() {
-    
+
     sniper::init();
     sniper::mainloop();
     sniper::cleanup();
 
     return 0;
-
 }

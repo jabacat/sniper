@@ -16,7 +16,8 @@ float FRICTION = 0.01f;
 
 /* Get the new X and Y speed of the player, given the current X and Y speed and
 readings from GLFW of the currently pressed keys. */
-std::pair<float, float> new_speed(GLFWwindow * wn, std::pair<float, float> old_speed) {
+std::pair<float, float> new_speed(GLFWwindow *wn,
+                                  std::pair<float, float> old_speed) {
 
     std::pair<float, float> ret = old_speed;
 
@@ -39,7 +40,7 @@ std::pair<float, float> new_speed(GLFWwindow * wn, std::pair<float, float> old_s
 
     /* We slow down a tiny bit if nothing is pressed. */
     if (hinc == 0 && vinc == 0) {
-        ret.first  *= (1.0f - FRICTION);
+        ret.first *= (1.0f - FRICTION);
         ret.second *= (1.0f - FRICTION);
         return ret;
     }
@@ -52,11 +53,10 @@ std::pair<float, float> new_speed(GLFWwindow * wn, std::pair<float, float> old_s
 
     float update_frac = 1 / SLIPPERINESS;
 
-    ret.first  = ret.first  * (1 - update_frac) + ideal_x * update_frac;
+    ret.first = ret.first * (1 - update_frac) + ideal_x * update_frac;
     ret.second = ret.second * (1 - update_frac) + ideal_y * update_frac;
 
     return ret;
-
 }
 
 int FPS = 50;
@@ -83,7 +83,26 @@ void Player::do_bounce(float screen_edge) {
         vy *= -1;
         y = -screen_edge;
     }
-
 }
 
+void Bullet::do_bounce(float screen_edge) {
+
+    if (x > screen_edge) {
+        vx *= -1;
+        x = screen_edge;
+    }
+    if (x < -screen_edge) {
+        vx *= -1;
+        x = -screen_edge;
+    }
+    if (y > screen_edge) {
+        vy *= -1;
+        y = screen_edge;
+    }
+    if (y < -screen_edge) {
+        vy *= -1;
+        y = -screen_edge;
+    }
 }
+
+} // namespace game
