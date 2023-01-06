@@ -54,7 +54,7 @@ static LoadResult<T> load_file(ZStringView filename) {
     do {
         struct stat stat;
         int fd = fp.fd();
-        if (fstat(fd, &stat) < -1) {
+        if (fstat(fd, &stat) < 0) {
             break;
         }
         if (stat.st_size == 0) {
