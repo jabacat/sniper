@@ -6,7 +6,11 @@
 #include <cerrno>
 #include <cstring>
 
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
+#define FILE_HAS_POSIX
+#endif
+
+#if defined(FILE_HAS_POSIX)
 #include <sys/mman.h>
 #include <sys/stat.h>
 #endif
@@ -36,7 +40,7 @@ struct FileHandle {
         }
     }
 
-    #if defined(__unix__)
+    #if defined(FILE_HAS_POSIX)
     int fd() const {
         return fileno(fp);
     }
@@ -50,11 +54,11 @@ static LoadResult<T> load_file(ZStringView filename) {
         return LoadResult<T>::last_errno();
 
     // Strategy 1. Try mmap
-    #if defined (__unix__)
+    #if defined(FILE_HAS_POSIX)
     do {
         struct stat stat;
         int fd = fp.fd();
-        if (fstat(fd, &stat) < -1) {
+        if (fstat(fd, &stat) < 0) {
             break;
         }
         if (stat.st_size == 0) {
