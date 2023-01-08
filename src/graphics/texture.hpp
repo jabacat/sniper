@@ -70,7 +70,7 @@ extern std::shared_ptr<gl::TextureAtlas>
 
 extern std::shared_ptr<tex::Texture> PLAYER_TEX;
 
-extern std::shared_ptr<gl::TextureAtlas> _BACKGROUND_TEX;
+static std::shared_ptr<gl::TextureAtlas> _BACKGROUND_TEX;
 extern std::shared_ptr<tex::Texture> BG_TEX;
 
 void load_all_textures();
