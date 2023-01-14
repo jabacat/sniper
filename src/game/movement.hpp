@@ -2,8 +2,6 @@
 
 /* This file has utilities for controlling the player's movement. */
 
-#include <vector>
-
 #include <GLFW/glfw3.h>
 
 #include <game/player.hpp>

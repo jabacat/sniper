@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 
 #include <game/gameobject.hpp>
 #include <game/renderable.hpp>
@@ -19,7 +20,10 @@ class Player : public GameObject, Renderable {
     // Read and update velocities.
     std::pair<float, float> getvel();
     void setvel(std::pair<float, float> newvel);
+    void setangle(float a);
 
+  protected:
+    float angle;
 };
 
-} // namespace
+} // namespace game
